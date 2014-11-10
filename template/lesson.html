@@ -1,0 +1,23 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title> new lesson </title>
+</head>
+<body>
+
+<form action="/lesson" method="post">
+标题:<input name="name" /><br>
+描述:<input name="desc" /><br>
+内容:<textarea name="content"></textarea><br>
+<button>提交</button>
+</form>
+
+<ul>
+{{range .Lessons}}
+<li><a href="/review?num=0&&lesson={{.}}">{{.}}</a></li>
+{{end}}
+</ul>
+</body>
+</html>

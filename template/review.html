@@ -1,0 +1,41 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title> review </title>
+</head>
+<body>
+
+Word: {{.Word}}
+
+<br>
+<a href="/review?num={{.Next}}&&lesson={{.Lesson}}">Next</a>
+<a href="/review?num={{.Next}}&&lesson={{.Lesson}}&&familiar=1&&word={{.Word}}">Familiar</a>
+
+<hr><br>
+
+<div>
+<p>{{.DictElem.Key}}</p>
+
+<b>音标：</b>
+
+{{range $i, $e := .DictElem.Phonetic}}
+<p>[{{$e}}] <audio src='{{index $.DictElem.Pron $i}}' controls="controls"></audio></p>
+{{end}}
+
+<b>释义：</b>
+{{range $i, $e := .DictElem.Pos}}
+<p>{{index $.DictElem.Pos $i}} {{index $.DictElem.Acceptation $i}}</p>
+{{end}}
+
+<b>例子：</b>
+{{range .DictElem.Sent}}
+<p>{{.Orig}}</p>
+<p>{{.Trans}}</p>
+{{end}}
+
+</div>
+
+</body>
+</html>

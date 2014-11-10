@@ -1,0 +1,183 @@
+<!doctype html>
+<html ng-app="remenber">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>快速记单词</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+<script src="app.js"></script>
+</head>
+<body ng-controller="RememberController">
+
+<div class="container">
+	<div class="page-header">
+	<center><h1> 快速记单词 <small> 努力学习！ </small></h1></center>
+	</div>
+	
+	<div class="alert alert-info">
+		<strong>{{username}}</strong> 您好～，您现已学会 <b>{{familiar_num}}</b> 个单词，请再接再厉！
+	</div>
+	
+	<!-- <div class="row">
+		{{username}} 您好～，您现已学会 <b>{{familiar_num}}</b> 个单词，请再接再厉！
+	</div>
+	 -->
+	
+	<div class="panel panel-success">
+		<div class="panel-heading">
+			<h3 class="panel-title">课程列表：</h3>
+		</div>
+		<div class="panel-body">
+			<div class="btn-group">
+				<button type="button" class="btn btn-default" ng-click="actioin_show_add_article()">添加课程</button>
+				<button type="button" class="btn btn-default" ng-click="actioin_show_add_familiar()">添加词汇</button>
+				<button type="button" class="btn btn-default" ng-click="actioin_show_import_dict()">导入词典</button>
+			</div>
+
+			<!-- {{username}} 您好～，您现已学会 <b>{{familiar_num}}</b> 个单词，请再接再厉！<br>  -->
+		</div>
+	
+
+		<table class="table table-striped">
+			<tr ng-repeat="article in articles">
+			<td width="20px" style="vertical-align:middle">  <span class="glyphicon glyphicon-hand-right"></span>  </td>
+			<td width="40%" style="vertical-align:middle"> <strong>{{article.Name}}</strong> </td>
+			<td style="vertical-align:middle">
+				<div class="btn-group">
+				<button type="button" class="btn btn-default" ng-click="action_view_article($index, article.Name)">查看</button>
+				<button type="button" class="btn btn-primary" ng-click="actioin_review_vocabulary($index, article.Name)">背单词</button>
+				<button type="button" class="btn btn-danger" ng-click="action_delete_article($index, article.Name)"> 删除</button>
+				</div>
+			</td> </tr>
+		</table>
+		<div class="panel-footer"> Copyright for cppbreak </div>
+	</div>
+</div>
+
+<div class="modal fade" id="page-create-article" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel"> 添加课程 </h4>
+			</div>
+			<div class="modal-body">
+				<label class="col-sm-2 control-label">标题</label>
+				<input type="text" class="form-control" placeholder="Text input" ng-model="new_article.title">
+				<br>
+				<label class="col-sm-2 control-label">内容</label>
+				<textarea class="form-control" rows="10" ng-model="new_article.content"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" ng-click="action_add_article(new_article)">添加</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" id="page-view-article" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel"> 查看课程 </h4>
+			</div>
+			<div class="modal-body">
+				<label><h3> {{view.title}} </h3> </label>
+				<hr>
+				<pre>{{view.content}}</pre>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" id="page-add-familiar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel"> 添加 familiar 词汇 </h4>
+			</div>
+			<div class="modal-body">
+				<textarea class="form-control" rows="10" ng-model="addfamiliar.content"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" ng-click="actioin_add_familiar(addfamiliar.content)">添加</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" id="page-import-dict" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel"> 导入词汇 familiar 词汇 </h4>
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-warning" ng-repeat="dict in importdict">
+					<label>{{dict.Name}} ({{dict.Content.length}} 词)</label>
+					<button type="button" class="btn btn-default" ng-click="actioin_import_dict($index, dict.Name)">导入</button>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="page-review-vocabulary" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel"> 课程 <b>{{review.title}}</b> 生词 (共 <b>{{review.index}}/{{review.vocabulary.length}}</b> 个): </h4>
+			</div>
+			<div class="modal-body">
+				<h3>{{review.word}}</h3>
+				<hr>
+				<button type="button" class="btn btn-warning" ng-click="action_display_translation(review.word)">释义</button>
+				<button type="button" class="btn btn-primary" ng-click="actioin_review_next_word()">下一条</button>
+				<button type="button" class="btn btn-success" ng-click="actioin_review_familiar_word()">会了</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				
+			</div>
+			<div class="modal-footer" style="text-align:left">
+				<p>{{review.trans.Key}}</p>
+				<p ng-repeat="pron in review.trans.Prons">
+					[{{pron.Phonetic}}]
+					<button type="button" class="glyphicon glyphicon-play" ng-click="action_play_sound(pron.Pron)"></button>
+					<br>
+				</p>
+				<p ng-repeat="explan in review.trans.Explans">
+					<strong>{{explan.Pos}}</strong>  <span>{{explan.Acceptation}}</span>
+				</p>
+				<hr>
+				<!-- <b>例句：</b>  -->
+				<ol>
+					<li ng-repeat="sent in review.trans.Sent">{{sent.Orig}} <br> {{sent.Trans}} </li>
+				</ol>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+</body>
+</html>
