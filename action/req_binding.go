@@ -1,4 +1,4 @@
-package app
+package action
 
 import (
 // "github.com/martini-contrib/binding"

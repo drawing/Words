@@ -6,14 +6,14 @@ import (
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
 
-	"./app"
+	"./action"
 
 	"log"
 )
 
-func login(req app.LoginReq, session sessions.Session) string {
+func login(req action.LoginReq, session sessions.Session, r render.Render) {
 	log.Println("login: email=", req.Email, ", token=", req.Token)
-	r.JSON(200, map[string]interface{}{"code", 0})
+	r.JSON(200, map[string]interface{}{"code": 0})
 }
 
 func main() {
@@ -21,10 +21,10 @@ func main() {
 
 	store := sessions.NewCookieStore([]byte("words"))
 
-	m.Use(session.Sessions("words_session", store))
+	m.Use(sessions.Sessions("words_session", store))
 	m.Use(render.Renderer())
 
-	m.Post("/api/login", binding.Bind(app.LoginReq{}), login)
+	m.Post("/api/login", binding.Bind(action.LoginReq{}), login)
 
 	m.Run()
 }
